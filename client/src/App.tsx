@@ -1,11 +1,14 @@
 import '@mantine/core/styles.css';
-
 import { MantineProvider } from '@mantine/core';
-import './App.css'
+import UrlShortenerForm from "./components/UrlShortenerForm";
 
 function App() {
 
-  return <MantineProvider>{/* Your app here */}</MantineProvider>;
+  return (
+    <MantineProvider>
+      <UrlShortenerForm />
+    </MantineProvider>
+  );
 }
 
 export default App

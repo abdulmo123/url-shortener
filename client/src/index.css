@@ -1,0 +1,14 @@
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 3rem;
+  background-color: #0f2a3a;
+}
+
+#root {
+  width: 100%;
+  max-width: 500px;
+}
