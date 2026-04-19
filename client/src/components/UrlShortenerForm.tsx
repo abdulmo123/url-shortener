@@ -1,4 +1,5 @@
-import { Button, Group, Paper, TextInput, Title, type PaperProps } from '@mantine/core';
+import { ActionIcon, Button, CopyButton, Group, Paper, TextInput, Title, Tooltip, type PaperProps } from '@mantine/core';
+import { CopyIcon, CheckIcon } from '@phosphor-icons/react';
 import { useForm } from '@mantine/form';
 
 export default function UrlShortenerForm(props: PaperProps) {
@@ -40,6 +41,20 @@ export default function UrlShortenerForm(props: PaperProps) {
                 mt="md"
                 variant="filled"
                 readOnly
+                rightSection={
+                  <CopyButton value="https://mantine.dev">
+                    {({ copied, copy }) => (
+                      <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="right">
+                        <ActionIcon color={copied ? 'teal' : 'gray'} variant="subtle" onClick={copy}>
+                          {copied ? <CheckIcon size={16} /> : <CopyIcon size={16} />}
+
+                        </ActionIcon>
+
+                      </Tooltip>
+                    )}
+
+                  </CopyButton>
+                }
             />
 
             <Group justify="center" mt="xl">
