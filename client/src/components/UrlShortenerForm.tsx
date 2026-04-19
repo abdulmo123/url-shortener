@@ -4,16 +4,13 @@ import { useForm } from '@mantine/form';
 export default function UrlShortenerForm(props: PaperProps) {
   const form = useForm({
     initialValues: {
-      name: '',
-      email: '',
-      subject: '',
-      message: '',
+      url: '',
     },
-    validate: {
-      name: (value) => value.trim().length < 2,
-      email: (value) => !/^\S+@\S+$/.test(value),
-      subject: (value) => value.trim().length === 0,
-    },
+    // validate: {
+    //   url: (value) => value.trim().length < 2,
+    //   email: (value) => !/^\S+@\S+$/.test(value),
+    //   subject: (value) => value.trim().length === 0,
+    // },
   });
 
   return (
@@ -30,20 +27,19 @@ export default function UrlShortenerForm(props: PaperProps) {
             </Title>
 
             <TextInput
-                label="Name"
+                label="URL"
                 placeholder="Enter long link here ..."
-                name="name"
+                name="url"
                 variant="filled"
-                {...form.getInputProps('name')}
+                {...form.getInputProps('url')}
             />
 
             <TextInput
-                label="Your generated shortened URL"
-                placeholder="Subject"
+                label="Generated shortened URL"
+                placeholder="Your generated shortened URL ..."
                 mt="md"
-                name="subject"
                 variant="filled"
-                {...form.getInputProps('subject')}
+                readOnly
             />
 
             <Group justify="center" mt="xl">
