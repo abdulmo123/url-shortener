@@ -25,7 +25,7 @@ export default function UrlShortenerForm(props: PaperProps) {
     const req: UrlFormReq = { url : values.url };
     const response = await generateShortUrl(req);
     const data = await response.json();
-    setShortUrl(data);
+    setShortUrl(data.shortUrl);
     setLoading(false);
   } 
 
@@ -54,12 +54,13 @@ export default function UrlShortenerForm(props: PaperProps) {
                 mt="md"
                 variant="filled"
                 readOnly
+                value={shortUrl}
                 rightSection={
                   loading ? (
                     <ActionIcon variant="subtle" loading>
                     </ActionIcon>
                   ) : (
-                    <CopyButton value={shortUrl}>
+                    <CopyButton  value={shortUrl}>
                       {({ copied, copy }) => (
                         <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="right">
                           <ActionIcon color={copied ? 'teal' : 'gray'} variant="subtle" onClick={copy}>
