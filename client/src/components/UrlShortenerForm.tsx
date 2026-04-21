@@ -1,6 +1,9 @@
 import { ActionIcon, Button, CopyButton, Group, Paper, TextInput, Title, Tooltip, type PaperProps } from '@mantine/core';
 import { CopyIcon, CheckIcon } from '@phosphor-icons/react';
 import { useForm } from '@mantine/form';
+import { useState } from 'react';
+import { generateShortUrl } from '../api/api';
+import type { UrlFormReq } from '../api/models';
 
 export default function UrlShortenerForm(props: PaperProps) {
   const form = useForm({
@@ -14,9 +17,21 @@ export default function UrlShortenerForm(props: PaperProps) {
     // },
   });
 
+  const [shortUrl, setShortUrl] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (values: { url: string; }) => { 
+    setLoading(true);
+    const req: UrlFormReq = { url : values.url };
+    const response = await generateShortUrl(req);
+    const data = await response.json();
+    setShortUrl(data);
+    setLoading(false);
+  } 
+
   return (
     <Paper radius="md" p="lg" withBorder {...props}>
-        <form onSubmit={form.onSubmit(() => {})}>
+        <form onSubmit={form.onSubmit(handleSubmit)}>
             <Title
                 order={2}
                 size="h1"
@@ -26,7 +41,6 @@ export default function UrlShortenerForm(props: PaperProps) {
             >
                 📎URL Shortener
             </Title>
-
             <TextInput
                 label="URL"
                 placeholder="Enter long link here ..."
@@ -34,7 +48,6 @@ export default function UrlShortenerForm(props: PaperProps) {
                 variant="filled"
                 {...form.getInputProps('url')}
             />
-
             <TextInput
                 label="Generated shortened URL"
                 placeholder="Your generated shortened URL ..."
@@ -42,21 +55,22 @@ export default function UrlShortenerForm(props: PaperProps) {
                 variant="filled"
                 readOnly
                 rightSection={
-                  <CopyButton value="https://mantine.dev">
-                    {({ copied, copy }) => (
-                      <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="right">
-                        <ActionIcon color={copied ? 'teal' : 'gray'} variant="subtle" onClick={copy}>
-                          {copied ? <CheckIcon size={16} /> : <CopyIcon size={16} />}
-
-                        </ActionIcon>
-
-                      </Tooltip>
-                    )}
-
-                  </CopyButton>
+                  loading ? (
+                    <ActionIcon variant="subtle" loading>
+                    </ActionIcon>
+                  ) : (
+                    <CopyButton value={shortUrl}>
+                      {({ copied, copy }) => (
+                        <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="right">
+                          <ActionIcon color={copied ? 'teal' : 'gray'} variant="subtle" onClick={copy}>
+                            {copied ? <CheckIcon size={16} /> : <CopyIcon size={16} />}
+                          </ActionIcon>
+                        </Tooltip>
+                      )}
+                    </CopyButton>
+                  )
                 }
             />
-
             <Group justify="center" mt="xl">
                 <Button type="submit" size="md">
                 Generate Shortened URL!
