@@ -1,0 +1,6 @@
+CREATE TABLE url (
+  key       TEXT PRIMARY KEY,
+  full_url  TEXT NOT NULL,
+  short_url TEXT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
