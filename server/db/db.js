@@ -1,0 +1,18 @@
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database('./my_db.db');
+const fs = require('fs');
+const path = require('path');
+
+function init_db() {
+    const sql = fs.readFileSync(path.join(__dirname, 'data.sql'), 'utf-8');
+
+    db.exec(sql, (err) => {
+        if (err) {
+            console.error('Error executing SQL file:', err.message);
+        } else {
+            console.log('SQL file executed successfully');
+        }
+    });
+}
+
+module.exports = { db, init_db };
