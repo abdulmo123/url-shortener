@@ -1,4 +1,4 @@
-CREATE TABLE url (
+CREATE TABLE IF NOT EXISTS url (
   key       TEXT PRIMARY KEY,
   full_url  TEXT NOT NULL,
   short_url TEXT NOT NULL,
