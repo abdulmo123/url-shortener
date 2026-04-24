@@ -3,7 +3,7 @@ const db = new sqlite3.Database('./my_db.db');
 const fs = require('fs');
 const path = require('path');
 
-function init_db() {
+const initDb = () => {
     const sql = fs.readFileSync(path.join(__dirname, 'data.sql'), 'utf-8');
 
     db.exec(sql, (err) => {
@@ -15,4 +15,4 @@ function init_db() {
     });
 }
 
-module.exports = { db, init_db };
+module.exports = { db, initDb };

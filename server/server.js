@@ -1,7 +1,7 @@
 const cors = require('cors');
 const express = require('express');
 const app = express();
-const { db, init_db } = require('./db/db');
+const { db, initDb } = require('./db');
 
 app.use(cors({
     origin: ['http://localhost:5173']
@@ -15,5 +15,5 @@ app.post('/gen-url', (req, res) => {
 
 app.listen(3000, () => {
     console.log('Server running ...');
-    init_db();
+    initDb();
 });
