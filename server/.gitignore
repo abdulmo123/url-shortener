@@ -21,3 +21,5 @@ pids
 .yarn/cache
 .grunt
 .gulp
+
+*.db
