@@ -39,4 +39,19 @@ function getAllData() {
     });
 }
 
-module.exports = { generateShortKey, saveUrl, getAllData };
+function getFullUrlByKey(key) {
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT full_url from url where key = ?';
+        const params = [key];
+
+        db.get(sql, params, function(err, row) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(row);
+            }
+        });
+    });
+}
+
+module.exports = { generateShortKey, saveUrl, getAllData, getFullUrlByKey };

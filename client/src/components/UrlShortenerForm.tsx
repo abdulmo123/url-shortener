@@ -10,11 +10,6 @@ export default function UrlShortenerForm(props: PaperProps) {
     initialValues: {
       url: '',
     },
-    // validate: {
-    //   url: (value) => value.trim().length < 2,
-    //   email: (value) => !/^\S+@\S+$/.test(value),
-    //   subject: (value) => value.trim().length === 0,
-    // },
   });
 
   const [shortUrl, setShortUrl] = useState('');
@@ -25,6 +20,7 @@ export default function UrlShortenerForm(props: PaperProps) {
     const req: UrlFormReq = { url : values.url };
     const response = await generateShortUrl(req);
     const data = await response.json();
+    console.log('data ===>', data);
     setShortUrl(data.shortUrl);
     setLoading(false);
   } 

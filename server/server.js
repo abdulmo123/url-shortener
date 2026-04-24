@@ -2,7 +2,7 @@ const cors = require('cors');
 const express = require('express');
 const app = express();
 const { db, initDb } = require('./db');
-const { generateShortKey, saveUrl, getAllData } = require('./urlService');
+const { generateShortKey, saveUrl, getAllData, getFullUrlByKey } = require('./urlService');
 
 app.use(cors({
     origin: ['http://localhost:5173']
@@ -18,8 +18,8 @@ app.post('/gen-url', async (req, res) => {
   await saveUrl(key, req.body.url, hostUrl + "/" + key);
   res.status(201).json({
     "key": key,
-    "full_url": req.body.url,
-    "short_url": hostUrl + "/" + key
+    "fullUrl": req.body.url,
+    "shortUrl": hostUrl + "/" + key
   });
 });
 
@@ -28,6 +28,14 @@ app.get('/all', async (req, res) => {
   res.status(200).json({
     "data": data
   });
+});
+
+app.get('/:key', async (req, res) => {
+    const key = req.params.key;
+    console.log(`Key is: ${key}`);
+    const data = await getFullUrlByKey(key);
+    console.log(`Full URL is: ${data.full_url}`);
+    res.redirect(data.full_url)
 });
 
 app.listen(3000, () => {
