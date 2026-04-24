@@ -6,7 +6,7 @@ const path = require('path');
 const initDb = () => {
     const sql = fs.readFileSync(path.join(__dirname, 'data.sql'), 'utf-8');
 
-    db.exec(sql, (err) => {
+    db.run(sql, (err) => {
         if (err) {
             console.error('Error executing SQL file:', err.message);
         } else {
