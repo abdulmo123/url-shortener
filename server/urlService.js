@@ -10,14 +10,33 @@ function generateShortKey(url, length = 8) {
 }
 
 function saveUrl(key, fullUrl, shortUrl) {
-    const sql = 'INSERT INTO url (key, full_url, short_url) VALUES(?, ?, ?)';
-    const params = [key, fullUrl, shortUrl];
+    return new Promise((resolve, reject) => {
+        const sql = 'INSERT INTO url (key, full_url, short_url) VALUES(?, ?, ?)';
+        const params = [key, fullUrl, shortUrl];
 
-    db.run(sql, params, function(err){
-        if (err) {
-            console.error('Error inserting into url table:', err.message);
-        } 
+        db.run(sql, params, function(err){
+            if (err) {
+                console.error('Save error:', err.message);
+                reject(err);
+            } else {
+                console.log('Saved successfully, rows affected:', this.changes);
+                resolve();
+            }
+        });
     });
 }
 
-module.exports = { generateShortKey, saveUrl };
+function getAllData() {
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT * from url';
+        db.all(sql, [], function(err, rows) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
+
+module.exports = { generateShortKey, saveUrl, getAllData };
