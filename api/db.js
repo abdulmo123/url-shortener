@@ -18,7 +18,6 @@ function getDbClient() {
     return client;
 }
 
-
 async function createUrlTable() {
     const db = getDbClient();
 
@@ -39,14 +38,41 @@ async function createUrlTable() {
             console.log('URL table created successfully!')
         }
     });
+
+    db.close();
 }
 
-
-async function saveUrl(urlObj) {
+async function saveUrlObjDb(urlObj) {
     const db = getDbClient();
 
-    
-    console.log('im about to save this dude ...', urlObj);
+    const sql = `
+        insert into url (key, full_url, short_url, created_at) 
+        values (?, ?, ?, CURRENT_TIMESTAMP)
+        returning *
+    `;
+
+    const params = [urlObj.key, urlObj.fullUrl, urlObj.shortUrl];
+    let data;
+
+    return new Promise((resolve, reject) => {
+        db.get(sql, params, (err, row) => {
+            if (err) {
+                // console.log(err.message);
+                reject(err);
+                return;
+            }
+
+            resolve(row);
+        });
+
+        db.close();
+    }).catch((err) => {
+        if (err.message.includes('SQLITE_CONSTRAINT')) {
+            console.error('This url has already been used. Please try another unique one.');
+        } else {
+            console.error(err.message);
+        }
+    });
 }
 
-module.exports = { getDbClient, createUrlTable, saveUrl };
+module.exports = { getDbClient, createUrlTable, saveUrlObjDb };

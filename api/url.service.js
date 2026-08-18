@@ -1,8 +1,8 @@
 const crypto = require('crypto');
 const express = require('express');
-const { saveUrl } = require('./db');
+const { saveUrlObjDb } = require('./db');
 
-async function generateShortUrl(hostUrl, req, length = 12) {
+async function generateShortUrl(hostUrl, req, length = 10) {
     const fullUrl = req.url;
     // console.log('fullUrl = ', fullUrl);
 
@@ -10,7 +10,6 @@ async function generateShortUrl(hostUrl, req, length = 12) {
         .update(fullUrl)
         .digest('base64url')
         .substring(0, length);
-
     // console.log('key = ', key);
 
     const shortUrl = `${hostUrl}/${key}`;
@@ -21,14 +20,11 @@ async function generateShortUrl(hostUrl, req, length = 12) {
         shortUrl: shortUrl,
         fullUrl: fullUrl
     };
+    // console.log('urlObj ==>' , urlObj);
 
-    await saveUrl(urlObj);
-
-    // saveUrl(urlObj)
+    const data = await saveUrlObjDb(urlObj);
+    if (data === undefined) return;
+    console.log('data item inserted ...', data);
 }
-
-// function saveUrl(urlObj) {
-//     console.log('urlObj ==>', urlObj);
-// }
 
 module.exports = { generateShortUrl };
