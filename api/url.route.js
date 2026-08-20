@@ -2,17 +2,20 @@ const express = require('express');
 const urlRouter = express.Router();
 const urlService = require('./url.service');
 
-urlRouter.post('/gen-short-url', (req, res) => {
+urlRouter.post('/gen-short-url', async (req, res) => {
     const hostUrl = req.protocol + '://' + req.get('host');
-    // console.log('hostUrl = ', hostUrl);
-
-    // let shortUrl = `${req.protocol}://${req.hostname}:`;
-    // let shortUrl = `${req.protocol}://${req.get('host')}/${key}`
-    // console.log('shortUrl =', shortUrl);
     const body = req.body;
-    // console.log('body -->', body);
-    urlService.generateShortUrl(hostUrl, body);
-    res.send(body);
+
+    const data = await urlService.generateShortUrl(hostUrl, body);
+    console.log('im gonna send this back dude', data);
+    res.send(data);
+});
+
+urlRouter.get('/:key', async (req, res) => {
+    const key = req.params.key;
+
+    const data = await urlService.getStoredUrl(key);
+    res.redirect(data.full_url);
 });
 
 

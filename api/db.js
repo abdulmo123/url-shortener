@@ -57,7 +57,6 @@ async function saveUrlObjDb(urlObj) {
     return new Promise((resolve, reject) => {
         db.get(sql, params, (err, row) => {
             if (err) {
-                // console.log(err.message);
                 reject(err);
                 return;
             }
@@ -75,4 +74,24 @@ async function saveUrlObjDb(urlObj) {
     });
 }
 
-module.exports = { getDbClient, createUrlTable, saveUrlObjDb };
+async function getDbStoredUrl(key) {
+    const db = getDbClient();
+
+    const sql = 'SELECT * FROM url WHERE key = ?';
+
+    let data;
+    return new Promise((resolve, reject) => {
+        db.get(sql, [key], (err, row) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+
+            resolve(row);
+        });
+    });
+
+    db.close();
+}
+
+module.exports = { getDbClient, createUrlTable, saveUrlObjDb, getDbStoredUrl };

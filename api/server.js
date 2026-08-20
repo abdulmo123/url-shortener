@@ -4,11 +4,15 @@ const { getDbClient, createUrlTable } = require('./db');
 const app = express();
 const port = 8080;
 const urlRoute = require('./url.route');
-// const cors = require('cors');
+const cors = require('cors');
+
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type']
+}));
 
 app.use(express.json());
-// app.set('trust proxy', true);
-// app.use(cors());
 
 app.use('/url', urlRoute);
 
